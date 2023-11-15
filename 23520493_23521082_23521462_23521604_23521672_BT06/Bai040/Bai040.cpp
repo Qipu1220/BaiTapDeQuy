@@ -22,16 +22,7 @@ int main()
 int UocLeLonNhat(int n)
 {
 	n = abs(n);
-	if (n <= 9)
-	{
-		if (n % 2 != 0)
-			return n;
-		return 0;
-	}
-	int lc = UocLeLonNhat(n / 10);
-	int dv = n % 10;
-	if (dv > lc)
-		return dv;
-	else
-		return lc;
+	if (n % 2 != 0)
+		return n;
+	return UocLeLonNhat(n / 2);
 }
