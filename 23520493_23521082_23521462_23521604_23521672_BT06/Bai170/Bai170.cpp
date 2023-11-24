@@ -10,20 +10,18 @@ using namespace std;
 
 void Nhap(float[], int&);
 void Xuat(float[], int);
-bool ktTang(float[], int);
-void DemConTang(float[], int, int, int);
-void DemConTang(float[], int);
+bool ktTang(float[], int,int,int);
+int DemConTang(float[], int, int, int);
+int DemConTang(float[], int);
 
 int main()
 {
 	int n;
-	int a[100];
+	float a[100];
 	Nhap(a, n);
 	cout << "Mang ban dau: \n";
 	Xuat(a, n);
-
-	cout << "\nLiet ke mang con: \n";
-	DemConTang(a, n);
+	cout << "\nSo luong mang con tang do l lon hon 1 la: " << DemConTang(a, n);
 
 	return 0;
 }
@@ -34,7 +32,7 @@ void Nhap(float a[], int& n)
 	cin >> n;
 	srand(time(NULL));
 	for (int i = 0; i < n; i++)
-		a[i] = rand() % 201 - 100;
+		cin >> a[i];
 }
 
 void Xuat(float a[], int n)
@@ -45,32 +43,33 @@ void Xuat(float a[], int n)
 	cout << setw(10) << a[n - 1];
 }
 
-void DemConTang(float a[], int n, int vt, int l)
+int DemConTang(float a[], int n, int vt, int l)
 {
-	if (l == 0)
-		return;
-	DemConTang(a, n, vt, l - 1);
-	cout << setw(10) << a[vt + l - 1];
+	if (vt == -1)
+		return 0;
+	int dem=DemConTang(a, n, vt-1, l);
+	if (ktTang(a, n, vt, l))
+		dem++;
+	return dem;
 }
 
-void DemConTang(float a[], int n)
+int DemConTang(float a[], int n)
 {
 	if (n == 0)
-		return;
-	DemConTang(a, n - 1);
-	for (int l = 1; l <= n; l++)
+		return 0;
+	int dem=DemConTang(a, n - 1);
+	for (int l = 2; l <= n; l++)
 	{
-		DemConTang(a, n, n - l, l);
-		cout << endl;
+		dem=dem+DemConTang(a, n, n - l, l);
 	}
+	return dem;
 }
 
 bool ktTang(float a[], int n,int vt,int l)
 {
-	if (n == 1)
-		return true;
-	for (int i = vt; i < vt+l-1; i++)
-		if (a[i] > a[vt+l-1])
-			return false;
-	return ktTang(a, n - 1,vt,l);
+	for (int i = vt; i < vt + l - 1; i++)
+		for (int j = i + 1; j <= vt + l - 1; j++)
+			if (a[i] > a[j])
+				return false;
+	return true;
 }
